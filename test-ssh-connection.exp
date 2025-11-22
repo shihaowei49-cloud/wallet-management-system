@@ -1,0 +1,128 @@
+#!/usr/bin/expect -f
+
+set timeout 60
+set server_ip "43.133.241.218"
+set username "administrator"
+set password "Helen123!@#"
+
+puts "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+puts "🔍 SSH连接测试工具"
+puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+
+puts "目标服务器: $server_ip"
+puts "用户名: $username"
+puts "连接中...\n"
+
+# 尝试连接
+spawn ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $username@$server_ip
+
+# 捕获输出并处理
+expect {
+    "*yes/no*" {
+        puts "✓ 收到密钥确认提示"
+        send "yes\r"
+        exp_continue
+    }
+    "*assword:" {
+        puts "✓ 收到密码提示"
+        send "$password\r"
+
+        expect {
+            "*administrator@*" {
+                puts "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                puts "✅ SSH连接成功！"
+                puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+
+                # 检查系统类型
+                puts "📋 正在检查服务器信息...\n"
+
+                send "uname -a 2>/dev/null || ver\r"
+                expect "*administrator@*"
+
+                send "cat /etc/os-release 2>/dev/null | grep PRETTY_NAME || echo 'Windows系统'\r"
+                expect "*administrator@*"
+
+                send "whoami\r"
+                expect "*administrator@*"
+
+                send "pwd\r"
+                expect "*administrator@*"
+
+                puts "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                puts "✅ 服务器可以正常连接！"
+                puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                puts "现在您可以运行部署命令了。"
+                puts "是否立即部署？(按 Ctrl+C 退出，或等待自动部署)\n"
+
+                sleep 3
+
+                puts "开始自动部署...\n"
+                send "curl -fsSL https://raw.githubusercontent.com/shihaowei49-cloud/wallet-management-system/main/自动拉取部署.sh | sudo bash\r"
+
+                expect {
+                    "*password*" {
+                        send "$password\r"
+                    }
+                }
+
+                # 等待部署完成
+                set timeout 600
+                expect {
+                    "*部署完成*" {
+                        puts "\n✅ 部署成功完成！"
+                    }
+                    timeout {
+                        puts "\n⏱ 部署超时，但可能仍在进行中"
+                    }
+                }
+
+                send "exit\r"
+                expect eof
+            }
+            "*Permission denied*" {
+                puts "\n❌ 密码错误或权限被拒绝"
+                exit 1
+            }
+            timeout {
+                puts "\n❌ 登录超时"
+                exit 1
+            }
+        }
+    }
+    "*Permission denied*" {
+        puts "\n❌ 连接被拒绝（密钥或密码问题）"
+        exit 1
+    }
+    "*Connection refused*" {
+        puts "\n❌ 连接被拒绝（端口未开放或服务未启动）"
+        exit 1
+    }
+    "*Connection timed out*" {
+        puts "\n❌ 连接超时（网络问题或防火墙阻止）"
+        exit 1
+    }
+    "*Connection reset*" {
+        puts "\n❌ 连接被重置"
+        puts "\n可能原因："
+        puts "1. SSH服务配置问题"
+        puts "2. 达到最大连接数限制"
+        puts "3. 防火墙规则限制"
+        puts "\n建议："
+        puts "1. 检查腾讯云安全组是否允许您的IP访问"
+        puts "2. 尝试使用腾讯云Web控制台登录"
+        puts "3. 检查SSH服务是否正常运行"
+        exit 1
+    }
+    timeout {
+        puts "\n❌ 连接超时（60秒）"
+        puts "\n这通常是因为："
+        puts "1. 服务器SSH服务响应慢"
+        puts "2. 网络连接不稳定"
+        puts "3. 防火墙策略限制"
+        exit 1
+    }
+    eof {
+        puts "\n❌ 连接意外断开"
+        exit 1
+    }
+}
