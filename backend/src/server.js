@@ -13,7 +13,7 @@ import transactionRoutes from './routes/transaction.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // 中间件
 app.use(cors());
