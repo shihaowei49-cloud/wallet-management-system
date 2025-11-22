@@ -1,7 +1,6 @@
 {
   "runtime": "node",
   "framework": "express",
-  "buildCommand": "cd backend && npm install && cd ../frontend && npm install && npm run build",
-  "startCommand": "node backend/src/server.js",
-  "outputDirectory": "frontend/dist"
+  "buildCommand": "npm install && cd backend && npm install && cd ../frontend && npm install && npm run build && cd ..",
+  "startCommand": "node backend/src/server.js"
 }
