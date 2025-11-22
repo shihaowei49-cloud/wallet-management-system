@@ -1,0 +1,69 @@
+#!/usr/bin/expect -f
+
+set timeout 120
+set server_ip "43.133.241.218"
+set username "administrator"
+set password "Helen123!@#"
+
+puts "\n🔌 尝试连接服务器（超时时间：120秒）...\n"
+
+# 使用更宽松的参数连接
+spawn ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=60 -o TCPKeepAlive=yes -o ConnectTimeout=120 $username@$server_ip
+
+# 处理各种可能的提示
+expect {
+    "*yes/no*" {
+        send "yes\r"
+        exp_continue
+    }
+    "*password:" {
+        puts "✓ 收到密码提示"
+        send "$password\r"
+    }
+    "*Password:" {
+        puts "✓ 收到密码提示"
+        send "$password\r"
+    }
+    timeout {
+        puts "\n❌ 连接超时（120秒）"
+        puts "\n可能原因："
+        puts "1. 服务器是Windows系统，需要使用远程桌面"
+        puts "2. SSH服务未启动或配置有问题"
+        puts "3. 网络防火墙限制"
+        exit 1
+    }
+    eof {
+        puts "\n❌ 连接被拒绝"
+        exit 1
+    }
+}
+
+# 等待登录成功
+expect {
+    "*administrator@*" {
+        puts "\n✅ 登录成功（Linux服务器）\n"
+        send "uname -a\r"
+        expect "*administrator@*"
+        send "cat /etc/os-release 2>/dev/null | grep PRETTY_NAME\r"
+        expect "*administrator@*"
+    }
+    "*>" {
+        puts "\n✅ 登录成功（Windows服务器）\n"
+        send "ver\r"
+        expect "*>"
+    }
+    "C:*>" {
+        puts "\n✅ 登录成功（Windows服务器）\n"
+        send "ver\r"
+        expect "C:*>"
+    }
+    timeout {
+        puts "\n❌ 登录超时"
+        exit 1
+    }
+}
+
+puts "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+puts "保持连接，等待命令..."
+
+interact
