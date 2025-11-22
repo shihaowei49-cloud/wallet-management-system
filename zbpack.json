@@ -1,5 +1,0 @@
-{
-  "build_command": "npm install && cd backend && npm install && cd ../frontend && npm install && npm run build && cd ..",
-  "start_command": "node backend/src/server.js",
-  "install_command": "npm install"
-}
