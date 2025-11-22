@@ -1,0 +1,7 @@
+{
+  "runtime": "node",
+  "framework": "vite",
+  "buildCommand": "npm install && npm run build",
+  "startCommand": "npx serve -s dist",
+  "outputDirectory": "dist"
+}

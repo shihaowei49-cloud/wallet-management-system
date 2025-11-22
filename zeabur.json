@@ -1,0 +1,26 @@
+{
+  "name": "wallet-management-system",
+  "services": [
+    {
+      "name": "backend",
+      "path": "./backend",
+      "type": "nodejs",
+      "buildCommand": "npm install",
+      "startCommand": "npm start",
+      "port": 5001,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "frontend",
+      "path": "./frontend",
+      "type": "static",
+      "buildCommand": "npm install && npm run build",
+      "outputDirectory": "dist",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
