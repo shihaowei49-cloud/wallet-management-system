@@ -1,0 +1,101 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set server_ip "43.133.241.218"
+set username "administrator"
+set password "Helen123!@#"
+
+puts "\n🔍 连接到腾讯云服务器..."
+puts "IP: $server_ip\n"
+
+# 连接到服务器
+spawn ssh -o StrictHostKeyChecking=no $username@$server_ip
+
+# 等待密码提示
+expect {
+    "*password:" {
+        send "$password\r"
+    }
+    timeout {
+        puts "\n❌ 连接超时"
+        exit 1
+    }
+}
+
+# 等待登录成功
+expect {
+    "*administrator@*" {
+        puts "\n✅ SSH连接成功！\n"
+    }
+    timeout {
+        puts "\n❌ 登录超时"
+        exit 1
+    }
+}
+
+# 执行检查命令
+send "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'\r"
+expect "*administrator@*"
+
+send "echo '🖥️  服务器信息'\r"
+expect "*administrator@*"
+
+send "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'\r"
+expect "*administrator@*"
+
+send "cat /etc/os-release | grep PRETTY_NAME\r"
+expect "*administrator@*"
+
+send "echo ''\r"
+expect "*administrator@*"
+
+send "echo '📦 软件环境:'\r"
+expect "*administrator@*"
+
+send "echo -n 'Node.js: ' && node --version 2>/dev/null || echo '❌ 未安装'\r"
+expect "*administrator@*"
+
+send "echo -n 'npm: ' && npm --version 2>/dev/null || echo '❌ 未安装'\r"
+expect "*administrator@*"
+
+send "echo -n 'Git: ' && git --version 2>/dev/null || echo '❌ 未安装'\r"
+expect "*administrator@*"
+
+send "echo -n 'PM2: ' && pm2 --version 2>/dev/null || echo '❌ 未安装'\r"
+expect "*administrator@*"
+
+send "echo -n 'Nginx: ' && nginx -v 2>&1 | head -1 || echo '❌ 未安装'\r"
+expect "*administrator@*"
+
+send "echo ''\r"
+expect "*administrator@*"
+
+send "echo '💾 磁盘空间:'\r"
+expect "*administrator@*"
+
+send "df -h | grep -E '^/dev/' | head -1\r"
+expect "*administrator@*"
+
+send "echo ''\r"
+expect "*administrator@*"
+
+send "echo '📁 检查项目目录:'\r"
+expect "*administrator@*"
+
+send "ls -la /var/www/ 2>/dev/null | grep wallet || echo '❌ 项目未部署'\r"
+expect "*administrator@*"
+
+send "echo ''\r"
+expect "*administrator@*"
+
+send "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'\r"
+expect "*administrator@*"
+
+send "echo '✅ 检查完成'\r"
+expect "*administrator@*"
+
+# 退出
+send "exit\r"
+expect eof
+
+puts "\n"

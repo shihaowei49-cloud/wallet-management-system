@@ -1,0 +1,61 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set server_ip "43.133.241.218"
+set username "administrator"
+set password "Helen123!@#"
+
+# 连接到服务器
+spawn ssh -o StrictHostKeyChecking=no $username@$server_ip
+
+# 等待密码提示
+expect {
+    "*password:" {
+        send "$password\r"
+    }
+    timeout {
+        puts "连接超时"
+        exit 1
+    }
+}
+
+# 等待登录成功
+expect {
+    "*administrator@*" {
+        puts "\n✅ SSH连接成功！\n"
+    }
+    timeout {
+        puts "登录超时"
+        exit 1
+    }
+}
+
+# 执行系统信息查询
+send "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'\r"
+send "echo '🖥️  服务器信息'\r"
+send "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'\r"
+send "echo 'OS:' && cat /etc/os-release | grep PRETTY_NAME\r"
+send "echo 'CPU:' && nproc\r"
+send "echo 'Memory:' && free -h | grep Mem\r"
+send "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'\r"
+expect "*administrator@*"
+
+# 检查环境
+send "echo '📋 检查环境...'\r"
+send "node --version 2>/dev/null || echo 'Node.js: 未安装'\r"
+expect "*administrator@*"
+
+send "git --version 2>/dev/null || echo 'Git: 未安装'\r"
+expect "*administrator@*"
+
+send "pm2 --version 2>/dev/null || echo 'PM2: 未安装'\r"
+expect "*administrator@*"
+
+send "nginx -v 2>&1 || echo 'Nginx: 未安装'\r"
+expect "*administrator@*"
+
+send "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'\r"
+send "echo '等待下一步指令...'\r"
+
+# 保持连接
+interact
