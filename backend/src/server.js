@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import balanceRoutes from './routes/balance.js';
@@ -8,6 +10,9 @@ import nftRoutes from './routes/nft.js';
 import dashboardRoutes from './routes/dashboard.js';
 import walletRoutes from './routes/wallet.js';
 import transactionRoutes from './routes/transaction.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 加载环境变量
 dotenv.config();
@@ -43,10 +48,21 @@ app.get('/health', (req, res) => {
   });
 });
 
-// 404 处理
-app.use((req, res) => {
-  res.status(404).json({ message: '接口不存在' });
-});
+// 生产环境：serve 前端静态文件
+if (process.env.NODE_ENV === 'production') {
+  const frontendDist = path.join(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendDist));
+
+  // 所有非API请求都返回index.html (用于前端路由)
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+} else {
+  // 开发环境：404 处理
+  app.use((req, res) => {
+    res.status(404).json({ message: '接口不存在' });
+  });
+}
 
 // 错误处理
 app.use((err, req, res, next) => {
