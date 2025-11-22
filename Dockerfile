@@ -23,7 +23,7 @@ COPY . .
 
 # 构建前端
 WORKDIR /app/frontend
-RUN npm run build
+RUN npx vite build
 
 # 清理前端 node_modules 节省空间（可选）
 RUN rm -rf node_modules
