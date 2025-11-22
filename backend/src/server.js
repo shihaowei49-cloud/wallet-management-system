@@ -31,6 +31,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// 生产环境：serve 前端静态文件（放在API路由之前）
+if (process.env.NODE_ENV === 'production') {
+  const frontendDist = path.join(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendDist));
+}
+
 // 路由
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
@@ -48,12 +54,9 @@ app.get('/health', (req, res) => {
   });
 });
 
-// 生产环境：serve 前端静态文件
+// 生产环境：所有非API请求都返回index.html (用于前端路由)
 if (process.env.NODE_ENV === 'production') {
   const frontendDist = path.join(__dirname, '../../frontend/dist');
-  app.use(express.static(frontendDist));
-
-  // 所有非API请求都返回index.html (用于前端路由)
   app.get('*', (req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
   });
