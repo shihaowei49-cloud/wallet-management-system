@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import MainLayout from './components/Layout/MainLayout';
 import Dashboard from './pages/Dashboard';
 import UserManagement from './pages/UserManagement';
@@ -15,8 +16,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 登录页 */}
+        {/* 登录和注册页 */}
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         {/* 主系统 */}
         <Route path="/" element={<MainLayout />}>

@@ -37,6 +37,7 @@ api.interceptors.response.use(
 // API 方法
 export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),
+  register: (userData) => api.post('/auth/register', userData),
   logout: () => {
     localStorage.removeItem('token');
     window.location.href = '/login';
