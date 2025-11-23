@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "$2a$10$hcYF4M9tddt6CZr5Tc7kLOfPIJFJvdTErS7Gn1nWK31FEc2lsuqp.",
+    "email": "admin@wallet.com",
+    "role": "admin",
+    "createdAt": "2025-11-23T21:41:22.049Z"
+  },
+  {
+    "id": 2,
+    "username": "testuser",
+    "password": "$2a$10$pSPjR/oTczc1IuMEqUS7xee.qlMERRsKOhh.EW.Dp1GHMMd5LaKWa",
+    "email": "test@example.com",
+    "role": "user",
+    "createdAt": "2025-11-23T21:41:50.872Z"
+  },
+  {
+    "id": 3,
+    "username": "shihao",
+    "password": "$2a$10$yW/qsN.9GuQ0Lmo17F9v1.aP2WG5lwE/crfHL7BXl/4KLlHKAkgjG",
+    "email": "shihaowei49@gmail.com",
+    "role": "user",
+    "createdAt": "2025-11-23T21:42:54.838Z"
+  }
+]

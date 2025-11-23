@@ -4,7 +4,7 @@ import { authMiddleware } from '../middleware/auth.js';
 const router = express.Router();
 
 // Mock 用户列表数据
-const mockUsers = [
+let mockUsers = [
   {
     id: 1,
     username: 'alice',
@@ -74,6 +74,57 @@ router.get('/list', authMiddleware, (req, res) => {
     const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
     res.json(paginatedUsers);
+  } catch (error) {
+    res.status(500).json({ message: '服务器错误', error: error.message });
+  }
+});
+
+// 更新用户
+router.put('/:id', authMiddleware, (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, email, walletAddress, status } = req.body;
+
+    const userIndex = mockUsers.findIndex((u) => u.id === parseInt(id));
+    if (userIndex === -1) {
+      return res.status(404).json({ message: '用户不存在' });
+    }
+
+    // 更新用户信息
+    mockUsers[userIndex] = {
+      ...mockUsers[userIndex],
+      username: username || mockUsers[userIndex].username,
+      email: email || mockUsers[userIndex].email,
+      walletAddress: walletAddress || mockUsers[userIndex].walletAddress,
+      status: status || mockUsers[userIndex].status,
+    };
+
+    res.json({
+      message: '更新成功',
+      user: mockUsers[userIndex],
+    });
+  } catch (error) {
+    res.status(500).json({ message: '服务器错误', error: error.message });
+  }
+});
+
+// 删除用户
+router.delete('/:id', authMiddleware, (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userIndex = mockUsers.findIndex((u) => u.id === parseInt(id));
+    if (userIndex === -1) {
+      return res.status(404).json({ message: '用户不存在' });
+    }
+
+    const deletedUser = mockUsers[userIndex];
+    mockUsers = mockUsers.filter((u) => u.id !== parseInt(id));
+
+    res.json({
+      message: '删除成功',
+      user: deletedUser,
+    });
   } catch (error) {
     res.status(500).json({ message: '服务器错误', error: error.message });
   }

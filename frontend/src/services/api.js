@@ -46,6 +46,8 @@ export const authAPI = {
 
 export const userAPI = {
   getList: (params) => api.get('/user/list', { params }),
+  update: (id, userData) => api.put(`/user/${id}`, userData),
+  delete: (id) => api.delete(`/user/${id}`),
 };
 
 export const balanceAPI = {
