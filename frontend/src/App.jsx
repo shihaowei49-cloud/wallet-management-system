@@ -11,6 +11,12 @@ import MyWallet from './pages/MyWallet';
 import CreateWallet from './pages/CreateWallet';
 import TransactionHistory from './pages/TransactionHistory';
 import DAppBrowser from './pages/DAppBrowser';
+// 新增页面
+import WalletManager from './pages/WalletManager';
+import Projects from './pages/Projects';
+import ProjectDetail from './pages/ProjectDetail';
+import AirdropRecords from './pages/AirdropRecords';
+import ApprovalManager from './pages/ApprovalManager';
 
 function App() {
   return (
@@ -25,15 +31,30 @@ function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
 
+          {/* 钱包管理 */}
+          <Route path="wallet-manager" element={<WalletManager />} />
+
           {/* 钱包功能 */}
           <Route path="wallet/my" element={<MyWallet />} />
           <Route path="wallet/create" element={<CreateWallet />} />
           <Route path="wallet/transactions" element={<TransactionHistory />} />
 
-          {/* 管理功能 */}
-          <Route path="users" element={<UserManagement />} />
+          {/* 资产监控 */}
           <Route path="balance" element={<BalanceMonitor />} />
           <Route path="nft" element={<NFTMonitor />} />
+
+          {/* 项目与任务 */}
+          <Route path="projects" element={<Projects />} />
+          <Route path="projects/:id" element={<ProjectDetail />} />
+
+          {/* 空投记录 */}
+          <Route path="airdrops" element={<AirdropRecords />} />
+
+          {/* 授权管理 */}
+          <Route path="approvals" element={<ApprovalManager />} />
+
+          {/* 用户管理 */}
+          <Route path="users" element={<UserManagement />} />
 
           {/* DApp 浏览器 */}
           <Route path="dapp" element={<DAppBrowser />} />

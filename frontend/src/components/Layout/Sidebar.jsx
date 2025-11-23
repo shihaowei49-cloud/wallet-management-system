@@ -1,6 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, Wallet, Image, LogOut, Globe, History } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Users,
+  Wallet,
+  Image,
+  LogOut,
+  Globe,
+  History,
+  FolderKanban,
+  Gift,
+  Shield,
+  Layers,
+} from 'lucide-react';
 import { authAPI } from '../../services/api';
 
 const Sidebar = () => {
@@ -12,22 +24,10 @@ const Sidebar = () => {
       color: 'text-orange-500',
     },
     {
-      path: '/wallet/my',
-      icon: Wallet,
-      label: '我的钱包',
-      color: 'text-blue-500',
-    },
-    {
-      path: '/wallet/transactions',
-      icon: Users,
-      label: '交易记录',
-      color: 'text-green-500',
-    },
-    {
-      path: '/users',
-      icon: Users,
-      label: '用户管理',
-      color: 'text-gray-500',
+      path: '/wallet-manager',
+      icon: Layers,
+      label: '钱包管理',
+      color: 'text-cyan-500',
     },
     {
       path: '/balance',
@@ -40,6 +40,30 @@ const Sidebar = () => {
       icon: Image,
       label: 'NFT 监控',
       color: 'text-purple-500',
+    },
+    {
+      path: '/projects',
+      icon: FolderKanban,
+      label: '项目管理',
+      color: 'text-blue-500',
+    },
+    {
+      path: '/airdrops',
+      icon: Gift,
+      label: '空投记录',
+      color: 'text-pink-500',
+    },
+    {
+      path: '/approvals',
+      icon: Shield,
+      label: '授权管理',
+      color: 'text-yellow-500',
+    },
+    {
+      path: '/users',
+      icon: Users,
+      label: '用户管理',
+      color: 'text-gray-500',
     },
     {
       path: '/dapp',
